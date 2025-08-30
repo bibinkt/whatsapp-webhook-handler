@@ -216,18 +216,10 @@ async def handle_webhook(
         # Log the incoming webhook
         logger.info(f"Received webhook: {payload.get('object', 'unknown')}")
         
-        # Process messages from the payload
-        if payload.get("object") == "whatsapp_business_account":
-            for entry in payload.get("entry", []):
-                for change in entry.get("changes", []):
-                    if change.get("field") == "messages":
-                        value = change.get("value", {})
-                        messages = value.get("messages", [])
-                        for message in messages:
-                            logger.info(f"Processing message from {message.get('from', 'unknown')}")
-        
-        # Forward to n8n in background to return quickly to Meta
-        background_tasks.add_task(forward_webhook_background, payload)
+       if payload.get("entry") and payload["entry"][0].get("changes") and payload["entry"][0]["changes"][0].get("value", {}).get("messages"):
+           background_tasks.add_task(forward_webhook_background, payload)
+       else:
+           logger.info(f"Skipping non-message webhook: {payload.get('entry', [{}])[0].get('changes', [{}])[0].get('field', 'unknown type')}")
         
         # Return 200 OK immediately to Meta
         return JSONResponse(
