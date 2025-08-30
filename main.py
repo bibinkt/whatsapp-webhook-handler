@@ -33,7 +33,7 @@ class Config:
     MAX_RETRIES = int(os.getenv("MAX_RETRIES", "3"))
     RETRY_DELAY = int(os.getenv("RETRY_DELAY", "5"))
     REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "10"))
-    ENABLE_SIGNATURE_VERIFICATION = false
+    ENABLE_SIGNATURE_VERIFICATION = os.getenv("ENABLE_SIGNATURE_VERIFICATION", "true").lower() == "true"
 
 config = Config()
 
