@@ -220,7 +220,7 @@ async def handle_webhook(
         if payload.get("entry") and payload["entry"][0].get("changes") and payload["entry"][0]["changes"][0].get("value", {}).get("messages"):
             background_tasks.add_task(forward_webhook_background, payload)
         else:
-            logger.info(f"Skipping non-message webhook: {payload.get('entry', [{}])[0].get('changes', [{}])[0].get('field', 'unknown type')}")
+            logger.info(f"Skipping non-message webhook --> : {payload}")
         
         # Return 200 OK immediately to Meta
         return JSONResponse(
